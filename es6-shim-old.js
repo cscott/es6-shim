@@ -805,7 +805,7 @@
         Set: (function() {
           var SetShim = function Set() {
             if (!(this instanceof SetShim)) throw new TypeError('Set must be called with "new"');
-            defineProperties(this, {'[[SetData]]': new Map()});
+            defineProperties(this, {'[[SetData]]': new collectionShims.Map()});
             Object.defineProperty(this, 'size', {
               configurable: true,
               enumerable: false,
