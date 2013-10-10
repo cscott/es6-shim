@@ -703,16 +703,31 @@
           function Map() {
             if (!(this instanceof Map)) throw new TypeError('Map must be called with "new"');
 
-            var head = new MapEntry(null, null);
-            // circular doubly-linked list.
-            head.next = head.prev = head;
-
             defineProperties(this, {
-              '_head': head,
+              '_head': null,
               '_storage': Object.create(null),
               '_size': 0
             });
           }
+
+          var ensureHead = function ensureHead(map) {
+            if (map._head === null) {
+              var head = map._head = new MapEntry(null, null);
+              // circular doubly-linked list.
+              head.next = head.prev = head;
+              var storage = map._storage;
+              map.clear();
+              Object.keys(storage).forEach(function(k) {
+                var v = storage[k];
+                if (k.charCodeAt(0)===36 /* fast check for leading '$' */) {
+                  k = k.substring(1);
+                } else {
+                  k = +k;
+                }
+                map.set(k, v);
+              });
+            }
+          };
 
           Object.defineProperty(Map.prototype, 'size', {
             configurable: true,
@@ -728,8 +743,10 @@
               if (fkey !== null) {
                 // fast O(1) path
                 var entry = this._storage[fkey];
+                if (this._head === null) return entry;
                 return entry ? entry.value : undefined;
               }
+              ensureHead(this);
               var head = this._head, i = head;
               while ((i = i.next) !== head) {
                 if (Object.is(i.key, key)) {
@@ -745,6 +762,7 @@
                 // fast O(1) path
                 return fkey in this._storage;
               }
+              ensureHead(this);
               var head = this._head, i = head;
               while ((i = i.next) !== head) {
                 if (Object.is(i.key, key)) {
@@ -755,18 +773,29 @@
             },
 
             set: function(key, value) {
-              var head = this._head, i = head, entry;
+              var head = this._head, i, entry;
               var fkey = fastkey(key);
               if (fkey !== null) {
                 // fast O(1) path
                 if (fkey in this._storage) {
-                  this._storage[fkey].value = value;
+                  if (head === null) {
+                    this._storage[fkey] = value;
+                  } else {
+                    this._storage[fkey].value = value;
+                  }
+                  return;
+                } else if (head === null) {
+                  this._storage[fkey] = value;
+                  this._size += 1;
                   return;
                 } else {
                   entry = this._storage[fkey] = new MapEntry(key, value);
                   i = head.prev;
                   // fall through
                 }
+              } else {
+                ensureHead(this);
+                head = i = this._head;
               }
               while ((i = i.next) !== head) {
                 if (Object.is(i.key, key)) {
@@ -783,16 +812,24 @@
             },
 
             'delete': function(key) {
-              var head = this._head, i = head;
+              var head = this._head, i;
               var fkey = fastkey(key);
               if (fkey !== null) {
                 // fast O(1) path
                 if (!(fkey in this._storage)) {
                   return false;
                 }
+                if (head === null) {
+                  delete this._storage[fkey];
+                  this._size -= 1;
+                  return;
+                }
                 i = this._storage[fkey].prev;
                 delete this._storage[fkey];
                 // fall through
+              } else {
+                ensureHead(this);
+                head = i = this._head;
               }
               while ((i = i.next) !== head) {
                 if (Object.is(i.key, key)) {
@@ -809,6 +846,8 @@
             clear: function() {
               this._size = 0;
               this._storage = Object.create(null);
+              if (this._head === null)
+                return;
               var head = this._head, i = head, p = i.next;
               while ((i = p) !== head) {
                 i.key = i.value = empty;
@@ -819,14 +858,17 @@
             },
 
             keys: function() {
+              ensureHead(this);
               return new MapIterator(this, "key");
             },
 
             values: function() {
+              ensureHead(this);
               return new MapIterator(this, "value");
             },
 
             entries: function() {
+              ensureHead(this);
               return new MapIterator(this, "key+value");
             },
 
@@ -834,6 +876,7 @@
               var context = arguments.length > 1 ? arguments[1] : null;
               var entireMap = this;
 
+              ensureHead(this);
               var head = this._head, i = head;
               while ((i = i.next) !== head) {
                 if (!i.isRemoved()) {
