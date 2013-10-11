@@ -1,11 +1,11 @@
-<a href="https://jepso-ci.com/paulmillr/es6-shim"><img src="https://jepso-ci.com/paulmillr/es6-shim.svg" align="right" alt="jepso-ci status" /></a>
+<a href="https://jepso-ci.com/cscott/es6-shim"><img src="https://jepso-ci.com/cscott/es6-shim.svg" align="right" alt="jepso-ci status" /></a>
 # ES6 Shim
 Provides compatibility shims so that legacy JavaScript engines behave as
 closely as possible to ECMAScript 6 (Harmony).
 
 [![Build Status][1]][2] [![dependency status][3]][4] [![dev dependency status][5]][6]
 
-[![browser support](https://ci.testling.com/paulmillr/es6-shim.png)](https://ci.testling.com/paulmillr/es6-shim)
+[![browser support](https://ci.testling.com/cscott/es6-shim.png)](https://ci.testling.com/cscott/es6-shim)
 
 ## Installation
 If you want to use it in browser:
@@ -159,10 +159,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-[1]: https://travis-ci.org/paulmillr/es6-shim.png
-[2]: https://travis-ci.org/paulmillr/es6-shim
-[3]: https://david-dm.org/paulmillr/es6-shim.png
-[4]: https://david-dm.org/paulmillr/es6-shim
-[5]: https://david-dm.org/paulmillr/es6-shim/dev-status.png
-[6]: https://david-dm.org/paulmillr/es6-shim#info=devDependencies
+[1]: https://travis-ci.org/cscott/es6-shim.png
+[2]: https://travis-ci.org/cscott/es6-shim
+[3]: https://david-dm.org/cscott/es6-shim.png
+[4]: https://david-dm.org/cscott/es6-shim
+[5]: https://david-dm.org/cscott/es6-shim/dev-status.png
+[6]: https://david-dm.org/cscott/es6-shim#info=devDependencies
 
