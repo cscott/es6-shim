@@ -15,7 +15,7 @@
   "testling": {
     "html": "testling.html",
     "browsers": [
-      "iexplore/9.0..latest"
+      "iexplore/9.0", "iexplore/10.0"
     ]
   },
   "dependencies": {},
