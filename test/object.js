@@ -103,12 +103,12 @@ describe('Object', function() {
       expect(fooNull).to.equal(foo);
       expect(Object.getPrototypeOf(foo)).to.equal(null);
     });
-	
+    
     describe('#iterator()', function() {
       it('should work custorm iterator', function() {
         var obj = {
-		  a: 9
-		  , '@@iterator': function() {
+          a: 9
+          , '@@iterator': function() {
             var iterableObject = this;
             var first = true;
 
@@ -123,7 +123,7 @@ describe('Object', function() {
               }
             }
           }
-		};
+        };
         expect(Array.from(obj)).to.eql(
           [ 9 ]
         );
