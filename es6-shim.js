@@ -67,7 +67,7 @@
     // work properly with each other, even though we don't have full Iterator
     // support.  That is, `Array.from(map.keys())` will work, but we don't
     // pretend to export a "real" Iterator interface.
-    var $iterator$ = '_@@iterator';
+    var $iterator$ = (typeof Symbol === 'object' && Symbol['iterator']) || '@@iterator';
     var addIterator = function(prototype, impl) {
       if (!impl) { impl = function iterator() { return this; }; }
       var o = {};

@@ -103,5 +103,31 @@ describe('Object', function() {
       expect(fooNull).to.equal(foo);
       expect(Object.getPrototypeOf(foo)).to.equal(null);
     });
+    
+    describe('#iterator()', function() {
+      it('should work custorm iterator', function() {
+        var obj = {
+          a: 9
+          , '@@iterator': function() {
+            var iterableObject = this;
+            var first = true;
+
+            return {
+              next: function() {
+                var result = {
+                  value: first ? iterableObject.a : void 0
+                  , done: !first
+                }
+                first = false;
+                return result;
+              }
+            }
+          }
+        };
+        expect(Array.from(obj)).to.eql(
+          [ 9 ]
+        );
+      });
+    });
   });
 });
