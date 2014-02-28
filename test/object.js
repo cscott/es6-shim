@@ -143,6 +143,15 @@ describe('Object', function() {
         expect(fooNull).to.equal(foo);
         expect(Object.getPrototypeOf(foo)).to.equal(null);
       });
+      it('should be able to reset prototype away from null', function() {
+        var foo = Object.create(null);
+        var Bar = {};
+        expect(Object.getPrototypeOf(foo)).to.equal(null);
+
+        var fooBar = Object.setPrototypeOf(foo, Bar);
+        expect(fooBar).to.equal(foo);
+        expect(Object.getPrototypeOf(foo)).to.equal(Bar);
+      });
     });
   });
 });
